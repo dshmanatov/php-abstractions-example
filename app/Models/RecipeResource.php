@@ -13,4 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 class RecipeResource extends Model
 {
     public $timestamps = false;
+
+    public function resource()
+    {
+        return $this->belongsTo(Resource::class);
+    }
 }
