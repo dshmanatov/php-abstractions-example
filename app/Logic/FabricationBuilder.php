@@ -2,44 +2,53 @@
 
 namespace App\Logic;
 
+use App\Exceptions\FabricationBuilderException;
 use Illuminate\Support\Collection;
 
-class FabricationBuilder implements \App\Contracts\FabricationBuilder
+class FabricationBuilder
 {
-    private $workshops;
+    private $warehouse;
 
-    private $resources;
+    private $workshops;
 
     public function __construct()
     {
+        $this->warehouse = null;
         $this->workshops = collect();
-        $this->resources = collect();
     }
 
     /**
-     * @inheritdoc
      */
-    public function addWorkshops($workshops)
+    public function setWorkshops($workshops)
     {
-        $this->workshops = $this->workshops->concat($workshops);
+        $this->workshops = $workshops;
+
+        return $this;
+    }
+
+    public function setWarehouse($items)
+    {
+        $this->warehouse = WarehouseFactory::fromCollection($items);
 
         return $this;
     }
 
     /**
-     * @param Collection $resources
-     * @return mixed
+     * @return \App\Contracts\Fabrication
+     * @throws FabricationBuilderException
      */
-    public function addResources($resources)
-    {
-        $this->resources = $this->resources->concat($resources);
-
-        return $this;
-    }
-
     public function build()
     {
+        if (is_null($this->warehouse)) {
+            throw new FabricationBuilderException("Не задан источник ресурсов");
+        }
+
+        if ($this->workshops->isEmpty()) {
+            throw new FabricationBuilderException("Не заданы фабрики");
+        }
+
         return app()->makeWith(\App\Contracts\Fabrication::class, [
+            'warehouse' => $this->warehouse,
             'workshops' => $this->workshops,
         ]);
     }
