@@ -6,6 +6,7 @@ use App\Models\Recipe;
 use App\Models\RecipeResource;
 use App\Models\Resource;
 use App\Models\Workshop;
+use App\Models\WorkshopRecipe;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -52,6 +53,13 @@ class DatabaseSeeder extends Seeder
             ['recipe_id' => 3, 'resource_id' => 3, 'quantity' => 1],
             ['recipe_id' => 4, 'resource_id' => 2, 'quantity' => 2],
             ['recipe_id' => 4, 'resource_id' => 3, 'quantity' => 1],
+        ]);
+
+        WorkshopRecipe::insert([
+            ['workshop_id' => 1, 'recipe_id' => 1, 'duration' => 5],
+            ['workshop_id' => 1, 'recipe_id' => 2, 'duration' => 10],
+            ['workshop_id' => 2, 'recipe_id' => 3, 'duration' => 10],
+            ['workshop_id' => 2, 'recipe_id' => 4, 'duration' => 3],
         ]);
 
         Schema::enableForeignKeyConstraints();
