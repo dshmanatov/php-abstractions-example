@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
             <rest-table
-                    idField="id"
+                    id-field="id"
                     :fields="[
                         {field: 'id', title: 'ID'},
                         {field: 'name', title: 'Название'},
