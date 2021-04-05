@@ -22,7 +22,7 @@ class RecipeResource extends Model implements \App\Contracts\RecipeResource
 
     public function getUniqueId()
     {
-        return $this->id;
+        return $this->resource->id;
     }
 
     public function getQuantity()

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Tasks;
 
 use App\Contracts\Workshop;
@@ -27,5 +28,10 @@ class WorkshopTask extends AbstractDurationAwareTask
     public function getDuration()
     {
         return $this->recipe->getDuration();
+    }
+
+    public function __toString()
+    {
+        return $this->recipe->getName() . ' (' . $this->recipe->getDuration() . ')';
     }
 }

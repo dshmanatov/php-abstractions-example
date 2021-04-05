@@ -45,7 +45,7 @@ class FabricationBuilder
     }
 
     /**
-     * @return \App\Contracts\Fabrication
+     * @return \App\Contracts\Fabricator
      * @throws FabricationBuilderException
      */
     public function build()
@@ -58,8 +58,8 @@ class FabricationBuilder
             throw new FabricationBuilderException("Не заданы фабрики");
         }
 
-        /** @var \App\Contracts\Fabrication $fabrication */
-        $fabrication = app()->make(\App\Contracts\Fabrication::class);
+        /** @var \App\Contracts\Fabricator $fabrication */
+        $fabrication = app()->make(\App\Contracts\Fabricator::class);
 
         $fabrication->setWarehouse($this->warehouse)
             ->setWorkshops($this->workshops);

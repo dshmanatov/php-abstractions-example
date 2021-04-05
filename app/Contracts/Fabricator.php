@@ -5,7 +5,7 @@ namespace App\Contracts;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerAwareInterface;
 
-interface Fabrication extends LoggerAwareInterface
+interface Fabricator extends LoggerAwareInterface
 {
     /**
      * @param Warehouse $warehouse

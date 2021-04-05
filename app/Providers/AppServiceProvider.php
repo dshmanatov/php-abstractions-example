@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Core\Logic\Timeline\PriorityTimeline;
-use App\Logic\Fabrication;
+use App\Logic\Fabricator;
 use App\Logic\Timeline;
 use App\Logic\Warehouse;
 use App\Models\WorkshopJob;
@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public $bindings = [
         \App\Contracts\Timeline::class     => PriorityTimeline::class,
         \App\Contracts\Warehouse::class    => Warehouse::class,
-        \App\Contracts\Fabrication::class  => Fabrication::class,
+        \App\Contracts\Fabricator::class   => Fabricator::class,
         \App\Contracts\WorkshopTask::class => WorkshopJob::class,
     ];
 

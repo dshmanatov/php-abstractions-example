@@ -12,7 +12,7 @@ use App\Tasks\WorkshopTask;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerAwareTrait;
 
-class Fabrication implements \App\Contracts\Fabrication
+class Fabricator implements \App\Contracts\Fabricator
 {
     use LoggerAwareTrait;
 
@@ -57,6 +57,8 @@ class Fabrication implements \App\Contracts\Fabrication
             $this
                 ->timeline
                 ->add($entry);
+
+            $this->log('Создана задача', $workshop, $task);
         };
     }
 
@@ -75,7 +77,7 @@ class Fabrication implements \App\Contracts\Fabrication
             $task = $entry->getTask();
 
             if ($this->logger) {
-                $this->logger->info("Фабрика {$task->getWorkshop()->getName()}");
+                $this->log("Завершена задача", $task->getWorkshop(), $task);
             }
 
             yield $task;
@@ -86,6 +88,21 @@ class Fabrication implements \App\Contracts\Fabrication
                 $entry->getTimelineInterval()->getNext()
             );
         }
+    }
+
+    /**
+     * @param Workshop          $workshop
+     * @param WorkshopTask|null $task
+     */
+    protected function log($message, Workshop $workshop, $task = null)
+    {
+        $message = "{$message}: {$workshop->getName()}";
+
+        if ($task) {
+            $message .= " - задача {$task}";
+        }
+
+        $this->logger->info($message);
     }
 
     public function run()
