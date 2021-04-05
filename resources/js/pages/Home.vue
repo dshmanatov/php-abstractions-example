@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-8">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">Ресурсы</div>
                 <div class="card-body">
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">Запуск</div>
                 <div class="card-body">
@@ -29,7 +29,9 @@
                     </button>
                     <div
                             v-if="result"
-                            class="mt-3">{{ result }}
+                            class="mt-3">
+                        <log :items="result.products" title="Результат"></log>
+                        <log :items="result.log" title="Лог"></log>
                     </div>
                 </div>
             </div>
@@ -37,6 +39,8 @@
     </div>
 </template>
 <script>
+  import Log from '../components/Log';
+
   export default {
     data: function() {
       return {
@@ -50,6 +54,9 @@
         this.$api.processes.post()
           .then(({data}) => (this.result = data));
       },
+    },
+    components: {
+      Log,
     },
   };
 </script>

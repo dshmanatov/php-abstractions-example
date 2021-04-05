@@ -5,14 +5,17 @@ namespace App\Logic;
 use App\Contracts\DurationAware;
 use App\Contracts\Timeline;
 use App\Contracts\TimelineInterval;
+use App\Contracts\Warehouse;
 use App\Contracts\Workshop;
 use App\Core\Types\PositionalTimelineInterval;
 use App\Tasks\WorkshopTask;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerAwareTrait;
 
 class Fabrication implements \App\Contracts\Fabrication
 {
+    use LoggerAwareTrait;
+
     /**
      * @var \App\Contracts\Warehouse
      */
@@ -27,13 +30,9 @@ class Fabrication implements \App\Contracts\Fabrication
     private $timeline;
 
     public function __construct(
-        $warehouse,
-        $workshops,
         Timeline $timeline
     )
     {
-        $this->warehouse = $warehouse;
-        $this->workshops = $workshops;
         $this->timeline = $timeline;
     }
 
@@ -75,7 +74,9 @@ class Fabrication implements \App\Contracts\Fabrication
             /** @var WorkshopTask $task */
             $task = $entry->getTask();
 
-            Log::channel('manufacturing')->info("Фабрика {$task->getWorkshop()->getName()}");
+            if ($this->logger) {
+                $this->logger->info("Фабрика {$task->getWorkshop()->getName()}");
+            }
 
             yield $task;
 
@@ -96,5 +97,28 @@ class Fabrication implements \App\Contracts\Fabrication
         }
 
         return $result;
+    }
+
+    /**
+     * @param Warehouse $warehouse
+     * @return self
+     */
+    public function setWarehouse(Warehouse $warehouse)
+    {
+        $this->warehouse = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param Collection|Workshop[] $workshops
+     * @return self
+     */
+    public function setWorkshops($workshops)
+    {
+        $this->workshops = $workshops;
+
+        return $this;
     }
 }

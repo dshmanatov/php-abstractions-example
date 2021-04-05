@@ -4,6 +4,7 @@ namespace App\Logic;
 
 use App\Exceptions\FabricationBuilderException;
 use Illuminate\Support\Collection;
+use Psr\Log\LoggerInterface;
 
 class FabricationBuilder
 {
@@ -11,10 +12,13 @@ class FabricationBuilder
 
     private $workshops;
 
+    private $logger;
+
     public function __construct()
     {
         $this->warehouse = null;
         $this->workshops = collect();
+        $this->logger = null;
     }
 
     /**
@@ -33,6 +37,13 @@ class FabricationBuilder
         return $this;
     }
 
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
     /**
      * @return \App\Contracts\Fabrication
      * @throws FabricationBuilderException
@@ -47,9 +58,14 @@ class FabricationBuilder
             throw new FabricationBuilderException("Не заданы фабрики");
         }
 
-        return app()->makeWith(\App\Contracts\Fabrication::class, [
-            'warehouse' => $this->warehouse,
-            'workshops' => $this->workshops,
-        ]);
+        /** @var \App\Contracts\Fabrication $fabrication */
+        $fabrication = app()->make(\App\Contracts\Fabrication::class);
+
+        $fabrication->setWarehouse($this->warehouse)
+            ->setWorkshops($this->workshops);
+
+        $fabrication->setLogger($this->logger);
+
+        return $fabrication;
     }
 }
