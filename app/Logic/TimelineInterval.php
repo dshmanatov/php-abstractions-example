@@ -2,6 +2,7 @@
 
 namespace App\Logic;
 
+use App\Contracts\PrettyDescription;
 use App\Core\Logic\Timeline\AbstractTimelineInterval;
 
 /**
@@ -9,7 +10,19 @@ use App\Core\Logic\Timeline\AbstractTimelineInterval;
  *
  * @package App\Logic
  */
-class TimelineInterval extends AbstractTimelineInterval
+class TimelineInterval extends AbstractTimelineInterval implements PrettyDescription
 {
-    // Put domain specific logic here, none required at this point
+    public function __construct($start = 0, $duration = 0)
+    {
+        $this->start = $start;
+        $this->duration = $duration;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrettyDescription()
+    {
+        return "Позиция: {$this->getPosition()}";
+    }
 }

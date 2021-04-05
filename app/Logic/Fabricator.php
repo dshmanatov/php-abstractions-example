@@ -72,6 +72,7 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
             $this->log(
                 'Создана задача',
                 [
+                    'interval' => $start,
                     'producer' => $producer,
                     'task'     => $task,
                     'stock'    => $this->stock
@@ -91,7 +92,7 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
         $this->producers->each(function (Producer $workshop) {
             $this->createTask(
                 $workshop,
-                new \App\Logic\TimelineInterval());
+                new \App\Logic\TimelineInterval(0, 0));
         });
 
         /** @var TimelineEntry $entry */
