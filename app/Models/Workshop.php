@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\PrettyDescription;
 use App\Core\Contracts\Fabrication\Producer;
 use App\Traits\WorkshopTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,7 @@ use Illuminate\Support\Collection;
  * @property Collection|Recipe[] $recipes
  * @package App\Models
  */
-class Workshop extends Model implements Producer
+class Workshop extends Model implements Producer, PrettyDescription
 {
     use WorkshopTrait;
 
@@ -41,5 +42,13 @@ class Workshop extends Model implements Producer
     public function getRecipes()
     {
         return $this->recipes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrettyDescription()
+    {
+        return $this->name;
     }
 }

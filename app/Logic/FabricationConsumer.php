@@ -11,7 +11,7 @@ use App\Core\Contracts\Fabrication\Consumable;
  *
  * @package App\Logic
  */
-class FabricationConsumer implements \App\Contracts\Fabrication\FabricationConsumer
+class FabricationConsumer implements \App\Contracts\FabricationConsumer
 {
     /**
      * Store produced items here

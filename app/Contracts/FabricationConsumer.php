@@ -1,5 +1,5 @@
 <?php
-namespace App\Contracts\Fabrication;
+namespace App\Contracts;
 
 use App\Core\Contracts\Fabrication\Consumer;
 use Illuminate\Contracts\Support\Arrayable;

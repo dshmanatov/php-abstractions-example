@@ -2,7 +2,7 @@
     <div>
         <h4>{{ title }}</h4>
         <ol>
-            <li v-for="item in items" v-html="item"></li>
+            <li v-for="item in items" v-text="item" style="white-space: pre;"></li>
         </ol>
     </div>
 </template>

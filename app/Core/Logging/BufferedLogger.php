@@ -2,6 +2,7 @@
 
 namespace App\Core\Logging;
 
+use App\Contracts\PrettyDescription;
 use Psr\Log\AbstractLogger;
 
 /**
@@ -33,6 +34,21 @@ class BufferedLogger extends AbstractLogger implements \App\Core\Contracts\Loggi
      */
     public function log($level, $message, array $context = array())
     {
+        $message = collect($context)
+            ->map(function ($value, $key) {
+                if ($value instanceof PrettyDescription) {
+                    $string = $value->getPrettyDescription();
+                } elseif ($value instanceof \Stringable) {
+                    $string = (string)$value;
+                } else {
+                    $string = json_encode($value, JSON_PRETTY_PRINT, 2);
+                }
+
+                return "{$key}: {$string}";
+            })
+            ->prepend($message)
+            ->join("\n");
+
         $this->messages[] = $message;
     }
 
@@ -54,4 +70,3 @@ class BufferedLogger extends AbstractLogger implements \App\Core\Contracts\Loggi
         $this->messages = [];
     }
 }
-

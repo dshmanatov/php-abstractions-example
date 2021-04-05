@@ -2,10 +2,13 @@
 
 namespace App\Logic;
 
+use App\Contracts\PrettyDescription;
 use App\Core\Contracts\Fabrication\Recipe;
 use App\Core\Contracts\Fabrication\RecipeItem;
+use App\Core\Contracts\Fabrication\StockableItem;
 use App\Core\Exceptions\OutOfStockException;
 use App\Core\Logic\Fabrication\AbstractStock;
+use App\Models\Resource;
 
 /**
  * Class Stock
@@ -14,7 +17,7 @@ use App\Core\Logic\Fabrication\AbstractStock;
  *
  * @package App\Logic
  */
-class Stock extends AbstractStock
+class Stock extends AbstractStock implements PrettyDescription
 {
     /**
      * @param $recipe
@@ -43,5 +46,22 @@ class Stock extends AbstractStock
             $this->getById($resource->getUniqueId())
                 ->decreaseStock($resource->getQuantity());
         });
+    }
+
+    /**
+     * This implementation is a little bit dumb, can be improved, it's getting sorta boring
+     *
+     * @return string
+     */
+    public function getPrettyDescription()
+    {
+        return collect($this->items)
+            ->map(function (StockableItem $item) {
+                return Resource::find($item->getUniqueId())->name
+                    . ' = '
+                    . $item->getStock();
+            })
+            ->join(', ');
+
     }
 }

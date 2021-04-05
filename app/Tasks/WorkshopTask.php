@@ -3,6 +3,7 @@
 namespace App\Tasks;
 
 
+use App\Contracts\PrettyDescription;
 use App\Core\Contracts\Fabrication\Producer;
 use App\Core\Contracts\Fabrication\ProducerRecipe;
 use App\Core\Logic\Task\AbstractTask;
@@ -13,7 +14,7 @@ use App\Types\Good;
  *
  * @package App\Tasks
  */
-class WorkshopTask extends AbstractTask implements \Stringable
+class WorkshopTask extends AbstractTask implements PrettyDescription
 {
     /**
      * @var ProducerRecipe
@@ -59,8 +60,8 @@ class WorkshopTask extends AbstractTask implements \Stringable
     /**
      * @return string
      */
-    public function __toString()
+    public function getPrettyDescription()
     {
-        return $this->recipe->getName() . ' (' . $this->recipe->getDuration() . ')';
+        return $this->recipe->getName() . ', длительность: ' . $this->recipe->getDuration();
     }
 }

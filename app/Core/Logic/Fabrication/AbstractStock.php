@@ -15,7 +15,7 @@ abstract class AbstractStock implements Stock
     /**
      * @var StockableItem[]
      */
-    private $items;
+    protected $items;
 
     /**
      * Return item by id
