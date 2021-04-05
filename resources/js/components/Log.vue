@@ -2,7 +2,7 @@
     <div>
         <h4>{{ title }}</h4>
         <ol>
-            <li v-for="item in items" v-text="item" style="white-space: pre;"></li>
+            <li v-for="item in items" v-text="item"></li>
         </ol>
     </div>
 </template>
@@ -17,3 +17,12 @@
     },
   };
 </script>
+<style scoped>
+    li {
+        white-space: pre;
+    }
+
+    li:first-line {
+        font-weight: bold;
+    }
+</style>
