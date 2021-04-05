@@ -2,13 +2,13 @@
 
 namespace App\Logic;
 
-use App\Core\Contracts\Behavioural\Taskable;
 use App\Core\Contracts\Fabrication\Consumer;
 use App\Core\Contracts\Fabrication\DurationAwareTask;
 use App\Core\Contracts\Fabrication\Producer;
 use App\Core\Contracts\Fabrication\Stock;
 use App\Core\Contracts\Timeline\Timeline;
 use App\Core\Contracts\Timeline\TimelineInterval;
+use App\Tasks\WorkshopTask;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerAwareTrait;
 
@@ -69,7 +69,14 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
                 ->timeline
                 ->add($entry);
 
-            $this->log('Создана задача', ['producer' => $producer, 'task' => $task, 'stock' => $this->stock]);
+            $this->log(
+                'Создана задача',
+                [
+                    'producer' => $producer,
+                    'task'     => $task,
+                    'stock'    => $this->stock
+                ]
+            );
         };
     }
 
@@ -84,7 +91,7 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
         $this->producers->each(function (Producer $workshop) {
             $this->createTask(
                 $workshop,
-                new \stdClass());
+                new \App\Logic\TimelineInterval());
         });
 
         /** @var TimelineEntry $entry */
@@ -93,42 +100,36 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
             $task = $entry->getTask();
 
             if ($this->logger) {
-                $this->log("Завершена задача", $task->getWorkshop(), $task);
+                $this->log(
+                    "Завершена задача",
+                    [
+                        'task' => $task->getProducer(),
+                        'task' => $task
+                    ]
+                );
             }
 
             yield $task->getResult();
 
-            // Schedule another task for the same workshop at the end of the last interval
+            // Schedule another task for the same producer at the end of the last interval
             $this->createTask(
-                $task->getWorkshop(),
+                $task->getProducer(),
                 $entry->getTimelineInterval()->getNext()
             );
         }
     }
 
     /**
-     * Выводим в лог. Можно пойти дальше, добавить форматтеры и так далее.
-     *
-     * Так как это "concrete" Fabricator, на данном этапе не вижу необходимости в вынесении форматирования лога наружу
+     * Выводим в лог.
      *
      * @param                   $message
-     * @param Workshop          $workshop
-     * @param WorkshopTask|null $task
-     * @param bool              $includeWarehouse
+     * @param array             $context
      */
-    protected function log($message, Workshop $workshop, $task = null, $includeWarehouse = false)
+    protected function log($message, $context)
     {
-        $message = "{$message}: {$workshop->getName()}";
-
-        if ($task) {
-            $message .= " - задача {$task}";
+        if ($this->logger) {
+            $this->logger->info($message, $context);
         }
-
-        if ($includeWarehouse) {
-            $message .= " <br>Склад: " . $this->warehouse;
-        }
-
-        $this->logger->info($message);
     }
 
     /**
@@ -142,38 +143,37 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
     }
 
     /**
-     * @param Stock $warehouse
-     * @return self
+     * @param Stock $stock
+     * @return $this
      */
-    public function setWarehouse(Stock $warehouse)
+    public function setStock(Stock $stock)
     {
-        $this->warehouse = $warehouse;
+        $this->stock = $stock;
 
         return $this;
     }
 
+    /**
+     * @param Consumer $consumer
+     * @return $this
+     */
     public function setConsumer(Consumer $consumer)
     {
         $this->consumer = $consumer;
-    }
 
-    /**
-     * @param Stock $warehouse
-     * @return self
-     */
-    public function setStock(Stock $warehouse)
-    {
-        // TODO: Implement setStock() method.
+        return $this;
     }
 
     /**
      * Set producers
      *
      * @param Collection|Producer[] $producers
-     * @return self
+     * @return $this
      */
     public function setProducers($producers)
     {
         $this->producers = $producers;
+
+        return $this;
     }
 }

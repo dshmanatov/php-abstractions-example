@@ -14,7 +14,7 @@ interface Fabricator extends LoggerAwareInterface
 {
     /**
      * @param Stock $warehouse
-     * @return self
+     * @return $this
      */
     public function setStock(Stock $warehouse);
 
@@ -22,7 +22,7 @@ interface Fabricator extends LoggerAwareInterface
      * Set producers
      *
      * @param Collection|Producer[] $producers
-     * @return self
+     * @return $this
      */
     public function setProducers($producers);
 
@@ -30,14 +30,14 @@ interface Fabricator extends LoggerAwareInterface
      * Set a consumer
      *
      * @param Consumer $consumer
-     * @return self
+     * @return $this
      */
     public function setConsumer(Consumer $consumer);
 
     /**
      * Run
      *
-     * @return mixed
+     * @return void
      */
     public function run();
 }
