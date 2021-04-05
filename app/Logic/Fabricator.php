@@ -2,25 +2,29 @@
 
 namespace App\Logic;
 
-use App\Contracts\DurationAware;
-use App\Contracts\Timeline;
-use App\Contracts\TimelineInterval;
-use App\Contracts\Warehouse;
-use App\Contracts\Workshop;
+use App\Core\Contracts\Behavioural\Taskable;
 use App\Core\Contracts\Fabrication\Consumer;
-use App\Core\Types\PositionalTimelineInterval;
-use App\Tasks\WorkshopTask;
+use App\Core\Contracts\Fabrication\DurationAwareTask;
+use App\Core\Contracts\Fabrication\Producer;
+use App\Core\Contracts\Fabrication\Stock;
+use App\Core\Contracts\Timeline\Timeline;
+use App\Core\Contracts\Timeline\TimelineInterval;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerAwareTrait;
 
-class Fabricator implements \App\Contracts\Fabricator
+/**
+ * Class Fabricator
+ *
+ * @package App\Logic
+ */
+class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
 {
     use LoggerAwareTrait;
 
     /**
-     * @var \App\Contracts\Warehouse
+     * @var Stock
      */
-    private $warehouse;
+    private $stock;
 
     /**
      * @var Consumer
@@ -28,13 +32,18 @@ class Fabricator implements \App\Contracts\Fabricator
     private $consumer;
 
     /**
-     * @var Collection
+     * @var Collection|Producer[]
      */
-    private $workshops;
+    private $producers;
 
     /** @var Timeline */
     private $timeline;
 
+    /**
+     * Fabricator constructor.
+     *
+     * @param Timeline $timeline
+     */
     public function __construct(
         Timeline $timeline
     )
@@ -45,18 +54,14 @@ class Fabricator implements \App\Contracts\Fabricator
     /**
      * Creates a new workshop job in a timeline
      *
-     * @param Workshop         $workshop
+     * @param Producer         $producer
      * @param TimelineInterval $start
      */
-    protected function createTask(Workshop $workshop, TimelineInterval $start = null)
+    protected function createTask(Producer $producer, TimelineInterval $start)
     {
-        /** @var DurationAware $task */
-        if ($task = $workshop->createTask($this->warehouse)) {
-            if ($start) {
-                $start->setDuration($task->getDuration());
-            } else {
-                $start = new PositionalTimelineInterval(0, $task->getDuration());
-            }
+        /** @var DurationAwareTask $task */
+        if ($task = $producer->createTask($this->stock)) {
+            $start->setDuration($task->getDuration());
 
             $entry = new TimelineEntry($task, $start);
 
@@ -64,17 +69,22 @@ class Fabricator implements \App\Contracts\Fabricator
                 ->timeline
                 ->add($entry);
 
-            $this->log('Создана задача', $workshop, $task, true);
+            $this->log('Создана задача', ['producer' => $producer, 'task' => $task, 'stock' => $this->stock]);
         };
     }
 
     /**
+     * Берем таск из таймлайна, запускаем в работу и получаем результат работы
+     *
      * @return \Generator|WorkshopTask[]
      */
     public function produce()
     {
-        $this->workshops->each(function (Workshop $workshop) {
-            $this->createTask($workshop);
+        // Первоначальное создание задач
+        $this->producers->each(function (Producer $workshop) {
+            $this->createTask(
+                $workshop,
+                new \stdClass());
         });
 
         /** @var TimelineEntry $entry */
@@ -97,6 +107,10 @@ class Fabricator implements \App\Contracts\Fabricator
     }
 
     /**
+     * Выводим в лог. Можно пойти дальше, добавить форматтеры и так далее.
+     *
+     * Так как это "concrete" Fabricator, на данном этапе не вижу необходимости в вынесении форматирования лога наружу
+     *
      * @param                   $message
      * @param Workshop          $workshop
      * @param WorkshopTask|null $task
@@ -117,6 +131,9 @@ class Fabricator implements \App\Contracts\Fabricator
         $this->logger->info($message);
     }
 
+    /**
+     * Запуск производства
+     */
     public function run()
     {
         foreach ($this->produce() as $value) {
@@ -125,24 +142,12 @@ class Fabricator implements \App\Contracts\Fabricator
     }
 
     /**
-     * @param Warehouse $warehouse
+     * @param Stock $warehouse
      * @return self
      */
-    public function setWarehouse(Warehouse $warehouse)
+    public function setWarehouse(Stock $warehouse)
     {
         $this->warehouse = $warehouse;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param Collection|Workshop[] $workshops
-     * @return self
-     */
-    public function setWorkshops($workshops)
-    {
-        $this->workshops = $workshops;
 
         return $this;
     }
@@ -150,5 +155,25 @@ class Fabricator implements \App\Contracts\Fabricator
     public function setConsumer(Consumer $consumer)
     {
         $this->consumer = $consumer;
+    }
+
+    /**
+     * @param Stock $warehouse
+     * @return self
+     */
+    public function setStock(Stock $warehouse)
+    {
+        // TODO: Implement setStock() method.
+    }
+
+    /**
+     * Set producers
+     *
+     * @param Collection|Producer[] $producers
+     * @return self
+     */
+    public function setProducers($producers)
+    {
+        $this->producers = $producers;
     }
 }

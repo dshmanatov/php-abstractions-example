@@ -1,5 +1,7 @@
 <?php
-namespace App\Contracts;
+namespace App\Core\Contracts\Timeline;
+
+use App\Core\Contracts\Behavioural\Taskable;
 
 interface TimelineEntry
 {

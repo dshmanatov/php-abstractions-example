@@ -24,8 +24,8 @@ class ProcessesController extends Controller
     )
     {
         $fabrication = $fabricationBuilder
-            ->setWarehouse(Resource::all())
-            ->setWorkshops(Workshop::all())
+            ->setStock(Resource::all())
+            ->setProducers(Workshop::all())
             ->setLogger($logger)
             ->setConsumer($consumer)
             ->build();

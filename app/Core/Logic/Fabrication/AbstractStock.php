@@ -1,25 +1,49 @@
 <?php
-namespace App\Logic;
 
-use App\Contracts\StockableItem;
+namespace App\Core\Logic\Fabrication;
 
-abstract class AbstractWarehouse implements \App\Contracts\Warehouse
+use App\Core\Contracts\Fabrication\Stock;
+use App\Core\Contracts\Fabrication\StockableItem;
+
+/**
+ * Class AbstractStock
+ *
+ * @package App\Core\Logic\Fabrication
+ */
+abstract class AbstractStock implements Stock
 {
     /**
      * @var StockableItem[]
      */
     private $items;
 
+    /**
+     * Return item by id
+     *
+     * @param $id
+     * @return StockableItem|null
+     */
     protected function getById($id)
     {
         return isset($this->items[$id]) ? $this->items[$id] : null;
     }
 
+    /**
+     * Set item by id
+     *
+     * @param $id
+     * @param $item
+     */
     protected function setById($id, $item)
     {
         $this->items[$id] = $item;
     }
 
+    /**
+     * Add item to stock
+     *
+     * @param StockableItem $item
+     */
     public function add(StockableItem $item)
     {
         $id = $item->getUniqueId();
@@ -29,14 +53,5 @@ abstract class AbstractWarehouse implements \App\Contracts\Warehouse
         } else {
             $this->setById($id, $item);
         }
-    }
-
-    public function __toString()
-    {
-        return collect($this->items)
-            ->map(function(StockableItem $item) {
-                return '#' . $item->getUniqueId() . ' = ' . $item->getStock();
-            })
-            ->join(', ');
     }
 }

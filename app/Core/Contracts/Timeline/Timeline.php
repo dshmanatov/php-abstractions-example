@@ -1,5 +1,5 @@
 <?php
-namespace App\Contracts;
+namespace App\Core\Contracts\Timeline;
 
 interface Timeline
 {

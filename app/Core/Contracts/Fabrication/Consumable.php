@@ -1,6 +1,12 @@
 <?php
+
 namespace App\Core\Contracts\Fabrication;
 
-interface Consumable extends \Stringable
+/**
+ * Interface Consumable
+ *
+ * @package App\Core\Contracts\Fabrication
+ */
+interface Consumable
 {
 }

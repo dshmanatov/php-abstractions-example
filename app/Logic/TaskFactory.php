@@ -1,18 +1,24 @@
 <?php
+
 namespace App\Logic;
 
-use App\Contracts\WorkshopRecipe;
+use App\Core\Contracts\Fabrication\Recipe;
 use App\Tasks\WorkshopTask;
 
+/**
+ * Class TaskFactory
+ *
+ * @package App\Logic
+ */
 class TaskFactory
 {
     /**
      * Create concrete class instance
      *
-     * @param WorkshopRecipe $recipe
+     * @param $recipe
      * @return WorkshopTask
      */
-    public static function fromRecipe(WorkshopRecipe $recipe)
+    public static function fromRecipe(Recipe $recipe)
     {
         return app()->makeWith(WorkshopTask::class, ['recipe' => $recipe]);
     }

@@ -1,15 +1,15 @@
 <?php
-namespace App\Core\Types;
+namespace App\Core\Logic\Task;
 
-use App\Contracts\Taskable;
+use App\Core\Contracts\Behavioural\Taskable;
 
+/**
+ * Class AbstractTask
+ *
+ * @package App\Core\Logic\Task
+ */
 abstract class AbstractTask implements Taskable
 {
-    public function __construct()
-    {
-        $this->onCreate();
-    }
-
     public function onCreate()
     {
         // TODO: Implement onCreate() method.

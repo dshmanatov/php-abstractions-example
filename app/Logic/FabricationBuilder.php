@@ -2,44 +2,92 @@
 
 namespace App\Logic;
 
+use App\Core\Contracts\Creational\Builder;
 use App\Core\Contracts\Fabrication\Consumer;
+use App\Core\Contracts\Fabrication\Fabricator;
+use App\Core\Contracts\Fabrication\Producer;
+use App\Core\Contracts\Fabrication\Stock;
 use App\Exceptions\FabricationBuilderException;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
 
-class FabricationBuilder
+/**
+ * Class FabricationBuilder
+ *
+ * Билдер для создания Fabrication
+ *
+ * @package App\Logic
+ */
+class FabricationBuilder implements Builder
 {
-    private $warehouse;
+    /**
+     * Склад/источник ресурсов
+     *
+     * @var Stock
+     */
+    private $stock;
 
-    private $workshops;
+    /**
+     * Производители/фабрики
+     *
+     * @var Collection|Producer[]
+     */
+    private $producers;
 
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
+    /**
+     * Потребитель продукции
+     *
+     * @var Consumer
+     */
     private $consumer;
 
+    /**
+     * FabricationBuilder constructor.
+     */
     public function __construct()
     {
-        $this->warehouse = null;
-        $this->workshops = collect();
+        $this->producers = collect();
+        $this->stock = null;
         $this->logger = null;
     }
 
     /**
+     * Set producers
+     *
+     * @param Producer[]|Collection $producers
+     * @return $this
      */
-    public function setWorkshops($workshops)
+    public function setProducers($producers)
     {
-        $this->workshops = $workshops;
+        $this->producers = collect($producers);
 
         return $this;
     }
 
-    public function setWarehouse($items)
+    /**
+     * Set stock
+     *
+     * @param $stock
+     * @return $this
+     */
+    public function setStock($stock)
     {
-        $this->warehouse = WarehouseFactory::fromCollection($items);
+        $this->stock = StockFactory::fromCollection($stock);
 
         return $this;
     }
 
+    /**
+     * Set logger
+     *
+     * @param LoggerInterface $logger
+     * @return $this
+     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -47,6 +95,12 @@ class FabricationBuilder
         return $this;
     }
 
+    /**
+     * Set consumer
+     *
+     * @param Consumer $consumer
+     * @return $this
+     */
     public function setConsumer(Consumer $consumer)
     {
         $this->consumer = $consumer;
@@ -55,16 +109,18 @@ class FabricationBuilder
     }
 
     /**
-     * @return \App\Contracts\Fabricator
+     * Build a Fabricator instance
+     *
+     * @return Fabricator
      * @throws FabricationBuilderException
      */
     public function build()
     {
-        if (is_null($this->warehouse)) {
+        if (is_null($this->stock)) {
             throw new FabricationBuilderException("Не задан источник ресурсов");
         }
 
-        if ($this->workshops->isEmpty()) {
+        if ($this->producers->isEmpty()) {
             throw new FabricationBuilderException("Не заданы фабрики");
         }
 
@@ -72,11 +128,11 @@ class FabricationBuilder
             throw new FabricationBuilderException("Не задан потребитель");
         }
 
-        /** @var \App\Contracts\Fabricator $fabricator */
-        $fabricator = app()->make(\App\Contracts\Fabricator::class);
+        /** @var Fabricator $fabricator */
+        $fabricator = app()->make(Fabricator::class);
 
-        $fabricator->setWarehouse($this->warehouse)
-            ->setWorkshops($this->workshops)
+        $fabricator->setStock($this->stock)
+            ->setProducers($this->producers)
             ->setConsumer($this->consumer);
 
         $fabricator->setLogger($this->logger);
