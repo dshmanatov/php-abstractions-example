@@ -2,36 +2,48 @@
 
 namespace App\Tasks;
 
-use App\Contracts\Workshop;
-use App\Contracts\WorkshopRecipe;
-use App\Core\Types\AbstractDurationAwareTask;
+
+use App\Core\Contracts\Fabrication\Producer;
+use App\Core\Contracts\Fabrication\ProducerRecipe;
+use App\Core\Logic\Task\AbstractTask;
 use App\Types\Good;
 
-class WorkshopTask extends AbstractDurationAwareTask
+/**
+ * Class WorkshopTask
+ *
+ * @package App\Tasks
+ */
+class WorkshopTask extends AbstractTask implements \Stringable
 {
+    /**
+     * @var ProducerRecipe
+     */
     private $recipe;
 
-    public function __construct(WorkshopRecipe $recipe)
+    public function __construct(ProducerRecipe $recipe)
     {
         $this->recipe = $recipe;
-
-        parent::__construct();
     }
 
     /**
-     * @return Workshop
+     * @return Producer
      */
-    public function getWorkshop()
+    public function getProducer()
     {
-        return $this->recipe->getWorkshop();
+        return $this->recipe->getProducer();
     }
 
+    /**
+     * @return mixed
+     */
     public function getDuration()
     {
         return $this->recipe->getDuration();
     }
 
     /**
+     * Return CONCRETE good
+     *
      * @return Good
      */
     public function getResult()

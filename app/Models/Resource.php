@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Contracts\StockableItem;
+use App\Core\Contracts\Fabrication\StockableItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,21 +22,41 @@ class Resource extends Model implements StockableItem
 
     public $timestamps = false;
 
+    /**
+     * Get item stock
+     *
+     * @return int
+     */
     public function getStock()
     {
         return $this->stock;
     }
 
+    /**
+     * Get item's unique ID
+     *
+     * @return int
+     */
     public function getUniqueId()
     {
         return $this->id;
     }
 
+    /**
+     * Increase qty in stock
+     *
+     * @param $quantity
+     */
     public function increaseStock($quantity)
     {
         $this->stock += $quantity;
     }
 
+    /**
+     * Decrease qty in stock
+     *
+     * @param $quantity
+     */
     public function decreaseStock($quantity)
     {
         $this->stock -= $quantity;

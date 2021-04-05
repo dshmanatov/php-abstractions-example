@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Core\Contracts\Fabrication\ProducerRecipe;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,39 +13,54 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer  $duration
  * @package App\Models
  */
-class WorkshopRecipe extends Model implements \App\Contracts\WorkshopRecipe
+class WorkshopRecipe extends Model implements ProducerRecipe
 {
     public $timestamps = false;
 
-    public function getDuration()
-    {
-        return $this->duration;
-    }
-
-    public function getName()
-    {
-        return $this->recipe->name;
-    }
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function recipe()
     {
         return $this->belongsTo(Recipe::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function workshop()
     {
         return $this->belongsTo(Workshop::class);
     }
 
-    public function getResources()
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->recipe->name;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getItems()
     {
         return $this->recipe->resources;
     }
 
     /**
-     * @return \App\Contracts\Workshop
+     * @inheritdoc
      */
-    public function getWorkshop()
+    public function getProducer()
     {
         return $this->workshop;
     }

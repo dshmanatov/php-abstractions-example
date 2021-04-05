@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string  $name
  * @package App\Models
  */
-class Recipe extends Model
+class Recipe extends Model implements \App\Core\Contracts\Fabrication\Recipe
 {
     protected $fillable = ['name'];
 
@@ -20,5 +20,15 @@ class Recipe extends Model
     public function resources()
     {
         return $this->hasMany(RecipeResource::class);
+    }
+
+    /**
+     * Get a list of items needed by a recipe
+     *
+     * @return mixed
+     */
+    public function getItems()
+    {
+        return $this->resources;
     }
 }

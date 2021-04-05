@@ -20,15 +20,15 @@ interface Stockable
      * Increase stock by
      *
      * @param $quantity
-     * @return mixed
+     * @return void
      */
-    public function increaseStock($quantity = 1);
+    public function increaseStock($quantity);
 
     /**
      * Decrease stock by
      *
      * @param $quantity
-     * @return mixed
+     * @return void
      */
-    public function decreaseStock($quantity = 1);
+    public function decreaseStock($quantity);
 }

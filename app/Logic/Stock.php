@@ -22,7 +22,7 @@ class Stock extends AbstractStock
      */
     public function grab(Recipe $recipe)
     {
-        $resources = collect($recipe->getResources());
+        $resources = collect($recipe->getItems());
 
         // Find first resource missing (if any)
         $missingResource = $resources

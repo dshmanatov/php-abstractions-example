@@ -10,9 +10,9 @@ namespace App\Core\Contracts\Fabrication;
 interface Recipe
 {
     /**
-     * Get a list of resources needed by a recipe
+     * Get a list of items needed by a recipe
      *
      * @return mixed
      */
-    public function getResources();
+    public function getItems();
 }

@@ -10,7 +10,7 @@ use App\Core\Contracts\Fabrication\Consumable;
  *
  * @package App\Types
  */
-class Good implements Consumable
+class Good implements Consumable, \Stringable
 {
     private $name;
 

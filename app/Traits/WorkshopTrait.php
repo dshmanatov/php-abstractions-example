@@ -2,10 +2,10 @@
 
 namespace App\Traits;
 
-use App\Contracts\Stock;
+use App\Core\Contracts\Fabrication\ProducerRecipe;
+use App\Core\Contracts\Fabrication\Stock;
 use App\Exceptions\OutOfStockException;
 use App\Logic\TaskFactory;
-use App\Models\WorkshopRecipe;
 use App\Tasks\WorkshopTask;
 use Illuminate\Support\Collection;
 
@@ -14,22 +14,23 @@ trait WorkshopTrait
     /**
      * Schedule a new job for a workshop
      *
-     * @param Stock $warehouse
+     * @param Stock $stock
      * @return WorkshopTask|null
      */
-    public function createTask(Stock $warehouse)
+    public function createTask(Stock $stock)
     {
-        /** @var Collection|WorkshopRecipe[] $recipes */
+        /** @var Collection|ProducerRecipe[] $recipes */
         $recipes = $this->getRecipes();
 
-        // Try grabbing resources from the warehouse
-        /** @var WorkshopRecipe $recipe */
-        $recipe = $recipes->first(function ($workshopRecipe) use ($warehouse) {
+        // Try grabbing resources from the stock
+        /** @var ProducerRecipe $recipe */
+        $recipe = $recipes->first(function ($producerRecipe) use ($stock) {
             try {
-                $warehouse->grab($workshopRecipe);
+                $stock->grab($producerRecipe);
 
                 return true;
             } catch (OutOfStockException $e) {
+                // Handle exception internally
                 return false;
             }
         });
