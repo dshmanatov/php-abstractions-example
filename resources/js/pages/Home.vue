@@ -7,7 +7,7 @@
                     <div class="card-body">
                         <button
                                 @click="run"
-                                class="btn btn-danger">Пуск
+                                class="btn btn-danger">Не нажимать
                         </button>
                     </div>
                 </div>
