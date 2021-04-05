@@ -99,15 +99,13 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
             /** @var WorkshopTask $task */
             $task = $entry->getTask();
 
-            if ($this->logger) {
-                $this->log(
-                    "Завершена задача",
-                    [
-                        'producer' => $task->getProducer(),
-                        'task'     => $task
-                    ]
-                );
-            }
+            $this->log(
+                "Завершена задача",
+                [
+                    'producer' => $task->getProducer(),
+                    'task'     => $task
+                ]
+            );
 
             yield $task->getResult();
 
