@@ -16,6 +16,12 @@ api.host = window.appData.API_URL;
 
 Vue.prototype.$api = api;
 
+// Bootstrap vue
+import { BootstrapVue } from 'bootstrap-vue';
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

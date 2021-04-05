@@ -19,6 +19,10 @@ class Workshop extends Model implements \App\Contracts\Workshop
 {
     use WorkshopTrait;
 
+    protected $fillable = [
+        'name',
+    ];
+
     public $timestamps = false;
 
     public function getName()

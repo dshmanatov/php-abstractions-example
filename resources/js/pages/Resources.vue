@@ -8,7 +8,9 @@
                         {field: 'name', title: 'Ресурс'},
                         {field: 'stock', title: 'Количество'},
                         ]"
-                    :rest="$api.resources">
+                    :rest="$api.resources"
+                    :schema="schema"
+            >
             </rest-table>
         </div>
     </div>
@@ -16,9 +18,24 @@
 <script>
   import RestTable from '../components/RestTable';
 
+  const schema = {
+    fields: [{
+      name: 'name',
+      label: 'Ресурс',
+      type: 'text',
+      required: true,
+    }, {
+      name: 'stock',
+      label: 'Количество',
+      type: 'number',
+      required: true,
+    },]
+  };
+
   export default {
     data() {
       return {
+        schema,
       }
     },
     components: {
