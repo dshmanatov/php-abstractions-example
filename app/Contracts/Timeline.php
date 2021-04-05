@@ -3,7 +3,7 @@ namespace App\Contracts;
 
 interface Timeline
 {
-    public function addJob(TimelineJob $job);
-    public function hasJobs();
-    public function extractJob();
+    public function add(TimelineEntry $entry);
+    public function isEmpty();
+    public function next();
 }

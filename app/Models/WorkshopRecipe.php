@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Contracts\DurationAware;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class WorkshopRecipe
  *
- * @property Recipe  $recipe
- * @property integer $duration
+ * @property Recipe   $recipe
+ * @property Workshop $workshop
+ * @property integer  $duration
  * @package App\Models
  */
 class WorkshopRecipe extends Model implements \App\Contracts\WorkshopRecipe
@@ -21,13 +21,31 @@ class WorkshopRecipe extends Model implements \App\Contracts\WorkshopRecipe
         return $this->duration;
     }
 
+    public function getName()
+    {
+        return $this->recipe->name;
+    }
+
     public function recipe()
     {
         return $this->belongsTo(Recipe::class);
     }
 
+    public function workshop()
+    {
+        return $this->belongsTo(Workshop::class);
+    }
+
     public function getResources()
     {
         return $this->recipe->resources;
+    }
+
+    /**
+     * @return \App\Contracts\Workshop
+     */
+    public function getWorkshop()
+    {
+        return $this->workshop;
     }
 }

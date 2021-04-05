@@ -1,8 +1,15 @@
 <?php
+
 namespace App\Logic;
 
+use App\Contracts\DurationAware;
+use App\Contracts\Timeline;
+use App\Contracts\TimelineInterval;
 use App\Contracts\Workshop;
+use App\Core\Types\PositionalTimelineInterval;
+use App\Tasks\WorkshopTask;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class Fabrication implements \App\Contracts\Fabrication
 {
@@ -16,54 +23,66 @@ class Fabrication implements \App\Contracts\Fabrication
      */
     private $workshops;
 
-    /** @var \App\Contracts\Timeline */
+    /** @var Timeline */
     private $timeline;
 
-    public function __construct($warehouse, $workshops, \App\Contracts\Timeline $timeline)
+    public function __construct(
+        $warehouse,
+        $workshops,
+        Timeline $timeline
+    )
     {
         $this->warehouse = $warehouse;
         $this->workshops = $workshops;
         $this->timeline = $timeline;
     }
 
-
     /**
      * Creates a new workshop job in a timeline
      *
-     * @param Workshop $workshop
-     * @param int      $start
+     * @param Workshop         $workshop
+     * @param TimelineInterval $start
      */
-    protected function createJob(Workshop $workshop, $start = 0)
+    protected function createTask(Workshop $workshop, TimelineInterval $start = null)
     {
-        // Try grabbing resources here
+        /** @var DurationAware $task */
+        if ($task = $workshop->createTask($this->warehouse)) {
+            if ($start) {
+                $start->setDuration($task->getDuration());
+            } else {
+                $start = new PositionalTimelineInterval(0, $task->getDuration());
+            }
 
-        $job = $workshop->createJob($this->warehouse);
+            $entry = new TimelineEntry($task, $start);
 
-        // Grab resources
-        $this->timeline->addJob(
-            $job,
-            $start
-        );
+            $this
+                ->timeline
+                ->add($entry);
+        };
     }
 
     /**
-     * @return \Generator
+     * @return \Generator|WorkshopTask[]
      */
     public function produce()
     {
         $this->workshops->each(function (Workshop $workshop) {
-            $this->createJob($workshop);
+            $this->createTask($workshop);
         });
 
-        echo "Created\n";exit;
-        /** @var WorkshopJob $job */
-        while ($job = $this->timeline->extractJob()) {
-            yield $job;
+        /** @var TimelineEntry $entry */
+        while ($entry = $this->timeline->next()) {
+            /** @var WorkshopTask $task */
+            $task = $entry->getTask();
 
-            // Create new job
-            $this->createJob(
-                $job->getWorkshop(),
-                $job->getStart() + $job->getDuration()
+            Log::channel('manufacturing')->info("Фабрика {$task->getWorkshop()->getName()}");
+
+            yield $task;
+
+            // Schedule another task for the same workshop at the end of the last interval
+            $this->createTask(
+                $task->getWorkshop(),
+                $entry->getTimelineInterval()->getNext()
             );
         }
     }

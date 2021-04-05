@@ -26,11 +26,6 @@ class Workshop extends Model implements \App\Contracts\Workshop
         return $this->name;
     }
 
-    public function __toString()
-    {
-        return "Фабрика {$this->getName()}";
-    }
-
     public function recipes()
     {
         return $this->hasMany(WorkshopRecipe::class);

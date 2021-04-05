@@ -6,6 +6,8 @@ use App\Logic\FabricationBuilder;
 use App\Models\Recipe;
 use App\Models\Resource;
 use App\Models\Workshop;
+use Illuminate\Support\Facades\Log;
+use Monolog\Logger;
 
 class ProcessesController extends Controller
 {
@@ -16,12 +18,11 @@ class ProcessesController extends Controller
             ->setWorkshops(Workshop::all())
             ->build();
 
-        $fabrication->run();
+        $result = $fabrication->run();
 
         return response()->json([
             'data' => [
-                'data' => $fabrication,
-                'dummy' => 'results'
+                'data' => $result,
             ]
         ]);
     }

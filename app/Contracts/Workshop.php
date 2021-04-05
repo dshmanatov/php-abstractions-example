@@ -6,7 +6,12 @@ use Illuminate\Support\Collection;
 
 interface Workshop
 {
-    public function createJob(Warehouse $warehouse);
+    /**
+     * @return string
+     */
+    public function getName();
+
+    public function createTask(Warehouse $warehouse);
 
     /**
      * @return Collection|WorkshopRecipe[]
