@@ -1,14 +1,8 @@
 <?php
-namespace App\Logging;
+namespace App\Core\Logging;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LoggerTrait;
-
-class SimpleLogger implements LoggerInterface, Arrayable
+class BufferedLogger extends AbstractLogger implements \App\Core\Contracts\Logging\BufferedLogger
 {
-    use LoggerTrait;
-
     private $messages = [];
 
     /**
@@ -27,14 +21,14 @@ class SimpleLogger implements LoggerInterface, Arrayable
         $this->messages[] = $message;
     }
 
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
     public function toArray()
     {
         return $this->messages;
+    }
+
+    public function flush()
+    {
+        $this->messages = [];
     }
 }
 
