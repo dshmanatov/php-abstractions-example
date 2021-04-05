@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use App\Core\Contracts\Fabrication\ProducerRecipe;
 use App\Core\Contracts\Fabrication\Stock;
-use App\Exceptions\OutOfStockException;
+use App\Core\Exceptions\OutOfStockException;
 use App\Logic\TaskFactory;
 use App\Tasks\WorkshopTask;
 use Illuminate\Support\Collection;
