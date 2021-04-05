@@ -2,7 +2,7 @@
 
 namespace App\Logic;
 
-use App\Contracts\PrettyDescription;
+use App\Core\Contracts\Behavioural\PrettyDescription;
 use App\Core\Contracts\Fabrication\Recipe;
 use App\Core\Contracts\Fabrication\RecipeItem;
 use App\Core\Contracts\Fabrication\StockableItem;

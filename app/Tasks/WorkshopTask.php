@@ -2,8 +2,7 @@
 
 namespace App\Tasks;
 
-
-use App\Contracts\PrettyDescription;
+use App\Core\Contracts\Behavioural\PrettyDescription;
 use App\Core\Contracts\Fabrication\Producer;
 use App\Core\Contracts\Fabrication\ProducerRecipe;
 use App\Core\Logic\Task\AbstractTask;

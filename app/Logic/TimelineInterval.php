@@ -2,7 +2,7 @@
 
 namespace App\Logic;
 
-use App\Contracts\PrettyDescription;
+use App\Core\Contracts\Behavioural\PrettyDescription;
 use App\Core\Logic\Timeline\AbstractTimelineInterval;
 
 /**

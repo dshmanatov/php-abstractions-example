@@ -1,5 +1,5 @@
 <?php
-namespace App\Contracts;
+namespace App\Core\Contracts\Behavioural;
 
 interface PrettyDescription
 {

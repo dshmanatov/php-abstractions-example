@@ -2,7 +2,7 @@
 
 namespace App\Core\Logging;
 
-use App\Contracts\PrettyDescription;
+use App\Core\Contracts\Behavioural\PrettyDescription;
 use Psr\Log\AbstractLogger;
 
 /**

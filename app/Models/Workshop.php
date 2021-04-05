@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Contracts\PrettyDescription;
+use App\Core\Contracts\Behavioural\PrettyDescription;
 use App\Core\Contracts\Fabrication\Producer;
 use App\Traits\WorkshopTrait;
 use Illuminate\Database\Eloquent\Model;
