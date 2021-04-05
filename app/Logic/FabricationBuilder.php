@@ -2,6 +2,7 @@
 
 namespace App\Logic;
 
+use App\Core\Contracts\Fabrication\Consumer;
 use App\Exceptions\FabricationBuilderException;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
@@ -13,6 +14,8 @@ class FabricationBuilder
     private $workshops;
 
     private $logger;
+
+    private $consumer;
 
     public function __construct()
     {
@@ -44,6 +47,13 @@ class FabricationBuilder
         return $this;
     }
 
+    public function setConsumer(Consumer $consumer)
+    {
+        $this->consumer = $consumer;
+
+        return $this;
+    }
+
     /**
      * @return \App\Contracts\Fabricator
      * @throws FabricationBuilderException
@@ -58,14 +68,19 @@ class FabricationBuilder
             throw new FabricationBuilderException("Не заданы фабрики");
         }
 
-        /** @var \App\Contracts\Fabricator $fabrication */
-        $fabrication = app()->make(\App\Contracts\Fabricator::class);
+        if (!$this->consumer instanceof Consumer) {
+            throw new FabricationBuilderException("Не задан потребитель");
+        }
 
-        $fabrication->setWarehouse($this->warehouse)
-            ->setWorkshops($this->workshops);
+        /** @var \App\Contracts\Fabricator $fabricator */
+        $fabricator = app()->make(\App\Contracts\Fabricator::class);
 
-        $fabrication->setLogger($this->logger);
+        $fabricator->setWarehouse($this->warehouse)
+            ->setWorkshops($this->workshops)
+            ->setConsumer($this->consumer);
 
-        return $fabrication;
+        $fabricator->setLogger($this->logger);
+
+        return $fabricator;
     }
 }

@@ -3,10 +3,6 @@ namespace App\Core\Types;
 
 use App\Contracts\DurationAware;
 
-abstract class AbstractDurationAwareTask extends AbstractTask implements DurationAware, \Stringable
+abstract class AbstractDurationAwareTask extends AbstractTask implements DurationAware
 {
-    public function __toString()
-    {
-        return "Not implemented";
-    }
 }

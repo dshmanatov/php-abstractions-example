@@ -2,6 +2,7 @@
 
 namespace App\Contracts;
 
+use App\Core\Contracts\Fabrication\Consumer;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerAwareInterface;
 
@@ -20,8 +21,7 @@ interface Fabricator extends LoggerAwareInterface
      */
     public function setWorkshops($workshops);
 
-    /**
-     * @return mixed
-     */
     public function run();
+
+    public function setConsumer(Consumer $consumer);
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Core\Logging\BufferedLogger;
 use App\Core\Logic\Timeline\PriorityTimeline;
+use App\Logic\FabricationConsumer;
 use App\Logic\Fabricator;
 use App\Logic\Warehouse;
 use App\ViewComposers\AppDataProvider;
@@ -17,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Contracts\Warehouse::class                   => Warehouse::class,
         \App\Contracts\Fabricator::class                  => Fabricator::class,
         \App\Core\Contracts\Logging\BufferedLogger::class => BufferedLogger::class,
+        \App\Core\Contracts\Fabrication\Consumer::class   => FabricationConsumer::class,
     ];
 
     /**

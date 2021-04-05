@@ -7,6 +7,7 @@ use App\Contracts\Timeline;
 use App\Contracts\TimelineInterval;
 use App\Contracts\Warehouse;
 use App\Contracts\Workshop;
+use App\Core\Contracts\Fabrication\Consumer;
 use App\Core\Types\PositionalTimelineInterval;
 use App\Tasks\WorkshopTask;
 use Illuminate\Support\Collection;
@@ -20,6 +21,11 @@ class Fabricator implements \App\Contracts\Fabricator
      * @var \App\Contracts\Warehouse
      */
     private $warehouse;
+
+    /**
+     * @var Consumer
+     */
+    private $consumer;
 
     /**
      * @var Collection
@@ -80,7 +86,7 @@ class Fabricator implements \App\Contracts\Fabricator
                 $this->log("Завершена задача", $task->getWorkshop(), $task);
             }
 
-            yield $task;
+            yield $task->getResult();
 
             // Schedule another task for the same workshop at the end of the last interval
             $this->createTask(
@@ -113,13 +119,9 @@ class Fabricator implements \App\Contracts\Fabricator
 
     public function run()
     {
-        $result = [];
-
         foreach ($this->produce() as $value) {
-            $result[] = $value;
+            $this->consumer->add($value);
         }
-
-        return $result;
     }
 
     /**
@@ -143,5 +145,10 @@ class Fabricator implements \App\Contracts\Fabricator
         $this->workshops = $workshops;
 
         return $this;
+    }
+
+    public function setConsumer(Consumer $consumer)
+    {
+        $this->consumer = $consumer;
     }
 }

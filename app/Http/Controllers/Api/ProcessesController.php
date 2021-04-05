@@ -2,27 +2,41 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Core\Contracts\Fabrication\Consumer;
 use App\Core\Contracts\Logging\BufferedLogger;
 use App\Logic\FabricationBuilder;
+use App\Logic\FabricationConsumer;
 use App\Models\Resource;
 use App\Models\Workshop;
 
 class ProcessesController extends Controller
 {
-    public function create(FabricationBuilder $fabricationBuilder, BufferedLogger $logger)
+    /**
+     * @param FabricationBuilder           $fabricationBuilder
+     * @param BufferedLogger               $logger
+     * @param Consumer|FabricationConsumer $consumer
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create(
+        FabricationBuilder $fabricationBuilder,
+        BufferedLogger $logger,
+        FabricationConsumer $consumer
+    )
     {
         $fabrication = $fabricationBuilder
             ->setWarehouse(Resource::all())
             ->setWorkshops(Workshop::all())
             ->setLogger($logger)
+            ->setConsumer($consumer)
             ->build();
 
         $result = $fabrication->run();
 
         return response()->json([
             'data' => [
-                'log'  => $logger->toArray(),
-                'data' => $result,
+                'goods' => $consumer->toArray(),
+                'log'   => $logger->toArray(),
+                'data'  => $result,
             ]
         ]);
     }
