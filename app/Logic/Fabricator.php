@@ -103,8 +103,8 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
                 $this->log(
                     "Завершена задача",
                     [
-                        'task' => $task->getProducer(),
-                        'task' => $task
+                        'producer' => $task->getProducer(),
+                        'task'     => $task
                     ]
                 );
             }
