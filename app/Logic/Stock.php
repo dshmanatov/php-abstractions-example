@@ -4,8 +4,8 @@ namespace App\Logic;
 
 use App\Core\Contracts\Fabrication\Recipe;
 use App\Core\Contracts\Fabrication\RecipeItem;
+use App\Core\Exceptions\OutOfStockException;
 use App\Core\Logic\Fabrication\AbstractStock;
-use App\Exceptions\OutOfStockException;
 
 /**
  * Class Stock
