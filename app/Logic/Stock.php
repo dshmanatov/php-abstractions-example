@@ -51,6 +51,7 @@ class Stock extends AbstractStock implements PrettyDescription
     /**
      * This implementation is a little bit dumb, can be improved, it's getting sorta boring
      *
+     * @todo
      * @return string
      */
     public function getPrettyDescription()
