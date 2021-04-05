@@ -22,5 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['as' => 'api.'], function () {
     Orion::resource('resources', \App\Http\Controllers\Api\ResourcesController::class);
     Orion::resource('workshops', \App\Http\Controllers\Api\WorkshopsController::class);
+    Orion::resource('recipes', \App\Http\Controllers\Api\RecipesController::class);
     Route::post('processes', '\App\Http\Controllers\Api\ProcessesController@create');
 });
