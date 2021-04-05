@@ -1,6 +1,8 @@
 <?php
 namespace App\Core\Logging;
 
+use Psr\Log\AbstractLogger;
+
 class BufferedLogger extends AbstractLogger implements \App\Core\Contracts\Logging\BufferedLogger
 {
     private $messages = [];

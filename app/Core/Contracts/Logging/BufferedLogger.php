@@ -2,7 +2,9 @@
 
 namespace App\Core\Contracts\Logging;
 
-interface BufferedLogger
+use Psr\Log\LoggerInterface;
+
+interface BufferedLogger extends LoggerInterface
 {
     public function toArray();
 
