@@ -23,14 +23,13 @@ class ProcessesController extends Controller
         FabricationConsumer $consumer
     )
     {
-        $fabrication = $fabricationBuilder
+        $fabricationBuilder
             ->setStock(Resource::all())
             ->setProducers(Workshop::all())
             ->setLogger($logger)
             ->setConsumer($consumer)
-            ->build();
-
-        $fabrication->run();
+            ->build()
+            ->run();
 
         return response()->json([
             'data' => [
