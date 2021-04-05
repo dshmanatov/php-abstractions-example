@@ -20,6 +20,11 @@ class WorkshopTask extends AbstractTask implements \Stringable
      */
     private $recipe;
 
+    /**
+     * WorkshopTask constructor.
+     *
+     * @param ProducerRecipe $recipe
+     */
     public function __construct(ProducerRecipe $recipe)
     {
         $this->recipe = $recipe;
@@ -51,6 +56,9 @@ class WorkshopTask extends AbstractTask implements \Stringable
         return new Good($this->recipe->getName());
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->recipe->getName() . ' (' . $this->recipe->getDuration() . ')';
