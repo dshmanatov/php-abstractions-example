@@ -30,13 +30,12 @@ class ProcessesController extends Controller
             ->setConsumer($consumer)
             ->build();
 
-        $result = $fabrication->run();
+        $fabrication->run();
 
         return response()->json([
             'data' => [
                 'goods' => $consumer->toArray(),
                 'log'   => $logger->toArray(),
-                'data'  => $result,
             ]
         ]);
     }
