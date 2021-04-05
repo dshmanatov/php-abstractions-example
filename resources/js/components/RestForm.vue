@@ -23,7 +23,7 @@
   };
 
   export default {
-    // Simple validator, checking require fields only
+    // Simple validator, checking required fields only
     props: {
       rest: Function,
       schema: Object,
