@@ -30,4 +30,13 @@ abstract class AbstractWarehouse implements \App\Contracts\Warehouse
             $this->setById($id, $item);
         }
     }
+
+    public function __toString()
+    {
+        return collect($this->items)
+            ->map(function(StockableItem $item) {
+                return '#' . $item->getUniqueId() . ' = ' . $item->getStock();
+            })
+            ->join(', ');
+    }
 }

@@ -58,7 +58,7 @@ class Fabricator implements \App\Contracts\Fabricator
                 ->timeline
                 ->add($entry);
 
-            $this->log('Создана задача', $workshop, $task);
+            $this->log('Создана задача', $workshop, $task, true);
         };
     }
 
@@ -91,15 +91,21 @@ class Fabricator implements \App\Contracts\Fabricator
     }
 
     /**
+     * @param                   $message
      * @param Workshop          $workshop
      * @param WorkshopTask|null $task
+     * @param bool              $includeWarehouse
      */
-    protected function log($message, Workshop $workshop, $task = null)
+    protected function log($message, Workshop $workshop, $task = null, $includeWarehouse = false)
     {
         $message = "{$message}: {$workshop->getName()}";
 
         if ($task) {
             $message .= " - задача {$task}";
+        }
+
+        if ($includeWarehouse) {
+            $message .= " <br>Склад: " . $this->warehouse;
         }
 
         $this->logger->info($message);

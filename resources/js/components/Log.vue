@@ -2,7 +2,7 @@
     <div>
         <h4>{{ title }}</h4>
         <ol>
-            <li v-for="item in items">{{ item }}</li>
+            <li v-for="item in items" v-html="item"></li>
         </ol>
     </div>
 </template>
