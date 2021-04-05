@@ -1,6 +1,7 @@
 <?php
 namespace App\Core\Logic\Task;
 
+use App\Core\Contracts\Behavioural\Durationable;
 use App\Core\Contracts\Behavioural\Taskable;
 
 /**
@@ -8,7 +9,7 @@ use App\Core\Contracts\Behavioural\Taskable;
  *
  * @package App\Core\Logic\Task
  */
-abstract class AbstractTask implements Taskable
+abstract class AbstractTask implements Taskable, Durationable
 {
     public function onCreate()
     {

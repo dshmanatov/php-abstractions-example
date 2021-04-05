@@ -3,7 +3,6 @@
 namespace App\Logic;
 
 use App\Core\Contracts\Fabrication\Consumer;
-use App\Core\Contracts\Fabrication\DurationAwareTask;
 use App\Core\Contracts\Fabrication\Producer;
 use App\Core\Contracts\Fabrication\Stock;
 use App\Core\Contracts\Timeline\Timeline;
@@ -59,7 +58,7 @@ class Fabricator implements \App\Core\Contracts\Fabrication\Fabricator
      */
     protected function createTask(Producer $producer, TimelineInterval $start)
     {
-        /** @var DurationAwareTask $task */
+        /** @var WorkshopTask $task */
         if ($task = $producer->createTask($this->stock)) {
             $start->setDuration($task->getDuration());
 
