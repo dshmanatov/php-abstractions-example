@@ -29,7 +29,7 @@ class RecipeResource extends Model implements RecipeItem
      *
      * @return mixed
      */
-    public function getUniqueId()
+    public function getIdentity()
     {
         return $this->resource->id;
     }

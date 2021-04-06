@@ -37,7 +37,7 @@ class Resource extends Model implements StockableItem
      *
      * @return int
      */
-    public function getUniqueId()
+    public function getIdentity()
     {
         return $this->id;
     }

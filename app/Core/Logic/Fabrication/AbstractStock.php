@@ -46,7 +46,7 @@ abstract class AbstractStock implements Stock
      */
     public function add(StockableItem $item)
     {
-        $id = $item->getUniqueId();
+        $id = $item->getIdentity();
 
         if ($existing = $this->getById($id)) {
             $existing->increaseStock($item->getStock());

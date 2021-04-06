@@ -30,7 +30,7 @@ class Stock extends AbstractStock implements PrettyDescription
         // Find first resource missing (if any)
         $missingResource = $resources
             ->first(function (RecipeItem $resource) {
-                $id = $resource->getUniqueId();
+                $id = $resource->getIdentity();
 
                 $existing = $this->getById($id);
 
@@ -43,7 +43,7 @@ class Stock extends AbstractStock implements PrettyDescription
         }
 
         $resources->each(function (RecipeItem $resource) {
-            $this->getById($resource->getUniqueId())
+            $this->getById($resource->getIdentity())
                 ->decreaseStock($resource->getQuantity());
         });
     }
@@ -58,7 +58,7 @@ class Stock extends AbstractStock implements PrettyDescription
     {
         return collect($this->items)
             ->map(function (StockableItem $item) {
-                return Resource::find($item->getUniqueId())->name
+                return Resource::find($item->getIdentity())->name
                     . ' = '
                     . $item->getStock();
             })

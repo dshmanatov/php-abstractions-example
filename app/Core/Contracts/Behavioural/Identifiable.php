@@ -12,5 +12,5 @@ interface Identifiable
     /**
      * @return int|string
      */
-    public function getUniqueId();
+    public function getIdentity();
 }
