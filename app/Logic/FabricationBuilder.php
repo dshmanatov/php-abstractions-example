@@ -131,11 +131,11 @@ class FabricationBuilder implements Builder
         /** @var Fabricator $fabricator */
         $fabricator = app()->make(Fabricator::class);
 
-        $fabricator->setStock($this->stock)
+        $fabricator
+            ->setStock($this->stock)
             ->setProducers($this->producers)
-            ->setConsumer($this->consumer);
-
-        $fabricator->setLogger($this->logger);
+            ->setConsumer($this->consumer)
+            ->setLogger($this->logger);
 
         return $fabricator;
     }
