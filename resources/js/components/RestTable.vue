@@ -43,7 +43,6 @@
     </div>
 </template>
 <script>
-  import Modal from './Modal';
   import RestForm from './RestForm';
 
   export default {
@@ -83,7 +82,6 @@
       },
     },
     components: {
-      Modal,
       RestForm,
     },
   };
