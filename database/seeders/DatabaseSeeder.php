@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         RecipeResource::truncate();
         Resource::truncate();
         Recipe::truncate();
+        WorkshopRecipe::truncate();
 
         Resource::insert([
             ['name' => 'Вода', 'stock' => 100],
