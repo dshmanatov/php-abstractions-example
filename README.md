@@ -3,6 +3,8 @@
 ## Summary
 This sample was built using Laravel 8.12 & Vue.js 2.5.
 
+Можно было полностью "запилить" на DDD :/
+
 Demo: https://www.youtube.com/watch?v=AZHa2_yBia8
 
 ## Usage instructions
